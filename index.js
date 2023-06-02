@@ -28,46 +28,57 @@ let locationAPIUTF8 = "";
 
 // 抓取經緯度並轉換成UTF-8地址
 function catchLocation() {
-  let lang = "";
-  if ("geolocation" in navigator) {
-    // geolocation is available
-    const successCallBack = async (position) => {
-      lang = `${position.coords.latitude},${position.coords.longitude}`;
-      // console.log('lang',lang);
-      await fetch(
-        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lang}&key=${GOOGLE_API_KEY}`
-      )
-        .then((res) => {
-          return res.json();
-        })
-        .then((myJson) => {
-          // console.log("myJson", myJson);
-          // 2GMV+C74 台灣台北市大安區 保留「 縣市+區域 」
-          locationResult = myJson.plus_code.compound_code.split("灣")[1];
-          // 如果有「台」就轉換成「台」 => 讓opendata API可以正常執行
-          locationResult.includes("台")
-            ? locationResult = locationResult.replace("台", "臺")
-            : locationResult;
-          // 「台灣台北市」=> 「臺北市」轉譯成 %E8%87%BA%E5%8C%97%E5%B8%82
-          locationAPIUTF8 = encodeURIComponent(locationResult.slice(0, 3));
-          console.log(
-            "locationResult",
-            locationResult,
-            "locationAPIUTF8",
-            locationAPIUTF8,'locationResult.slice(0, 3)',locationResult.slice(0, 3)
-          );
-          catchWeather();
-        });
-    };
-    // 錯誤訊息
-    const errorCallBack = (err) => {
-      console.log("錯誤", err);
-    };
-    navigator.geolocation.getCurrentPosition(successCallBack, errorCallBack);
+  if (!localStorage.getItem("theCityName")) {
+    let lang = "";
+    if ("geolocation" in navigator) {
+      // geolocation is available
+      const successCallBack = async (position) => {
+        lang = `${position.coords.latitude},${position.coords.longitude}`;
+        // console.log('lang',lang);
+        await fetch(
+          `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lang}&key=${GOOGLE_API_KEY}`
+        )
+          .then((res) => {
+            return res.json();
+          })
+          .then((myJson) => {
+            // console.log("myJson", myJson);
+            // 2GMV+C74 台灣台北市大安區 保留「 縣市+區域 」
+            locationResult = myJson.plus_code.compound_code.split("灣")[1];
+            // 如果有「台」就轉換成「台」 => 讓opendata API可以正常執行
+            locationResult.includes("台")
+              ? (locationResult = locationResult.replace("台", "臺"))
+              : locationResult;
+            // 「台灣台北市」=> 「臺北市」轉譯成 %E8%87%BA%E5%8C%97%E5%B8%82
+            locationAPIUTF8 = encodeURIComponent(locationResult.slice(0, 3));
+            console.log(
+              "locationResult",
+              locationResult,
+              "locationAPIUTF8",
+              locationAPIUTF8,
+              "locationResult.slice(0, 3)",
+              locationResult.slice(0, 3)
+            );
+            catchWeather();
+            localStorage.setItem("theCityName", locationResult);
+            localStorage.setItem("theCityNameUTF8", locationAPIUTF8);
+          });
+      };
+      // 錯誤訊息
+      const errorCallBack = (err) => {
+        console.log("錯誤", err);
+      };
+      navigator.geolocation.getCurrentPosition(successCallBack, errorCallBack);
+    } else {
+      // geolocation IS NOT available
+      // 如沒有成功抓取Location，預設地址為臺北市
+      locationAPIUTF8 = "%E8%87%BA%E5%8C%97%E5%B8%82";
+      catchWeather();
+    }
   } else {
-    // geolocation IS NOT available
-    // 如沒有成功抓取Location，預設地址為臺北市
-    locationAPIUTF8 = "%E8%87%BA%E5%8C%97%E5%B8%82";
+    console.log("已經有了不用再用GOOGLE API");
+    locationResult = localStorage.getItem("theCityName");
+    locationAPIUTF8 = localStorage.getItem("theCityNameUTF8");
     catchWeather();
   }
 }
@@ -108,6 +119,14 @@ function catchWeather() {
 
 function catchNowDay(t) {
   // 同步修改日期
+  nowDDay.innerText = now
+    .toLocaleDateString()
+    .split("/")
+    .map((x) => {
+      if (x.length < 2) return x.padStart(2, "0");
+      return x;
+    })
+    .join("-");
   nowDDay.innerText = t.toJSON().slice(0, 10);
   // 修改出勤查詢按鈕的日期
   nowCalender.innerText = t.getDate();
@@ -126,23 +145,26 @@ function catchNowDay(t) {
 
 window.setInterval(clock, 1000);
 function clock() {
-  let today = new Date();
-  let hh = today.getHours();
-  let mm = today.getMinutes();
-  let ss = today.getSeconds();
+  let hh = new Date().getHours();
+  let mm = new Date().getMinutes();
+  let ss = new Date().getSeconds();
   // 判斷是否過凌晨要調整日期
   if (hh == 0 && mm == 0 && ss <= 5) {
-    catchNowDay(today);
+    console.log('現在時間',hh,mm,ss);
+    catchNowDay();
   }
   // 改變格式
-  hh < 10 ? (hh = `0${hh}`) : hh;
-  mm < 10 ? (mm = `0${mm}`) : mm;
-  ss < 10 ? (ss = `0${ss}`) : ss;
-  nowTime.innerHTML = `${hh}:${mm}:${ss}`;
+  let time = [hh, mm, ss]
+    .map((x) => {
+      +x < 10 ? (x = `0${x}`) : x;
+      return x;
+    })
+    .join(":");
+  nowTime.innerHTML = time;
 
   // 抓取天氣12小時的預測，如果現在時間超過，就重新抓天氣
   let endTime = localStorage.getItem("weatherEndTime");
-  if (new Date(`${today} ${hh}:${mm}:${ss}`) >= new Date(endTime)) {
+  if (new Date() >= new Date(endTime)) {
     console.log("現在時間大於天氣的結束時間");
     catchWeather();
   }

@@ -105,7 +105,7 @@ if (nowClass) {
   // 3. 抓取目前位置
   catchLocation();
   // 4. 抓取現在日期、時間
-  catchNowDay(new Date());
+  catchNowDay();
 }
 
 function addParents() {
