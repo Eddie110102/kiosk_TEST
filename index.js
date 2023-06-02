@@ -119,7 +119,7 @@ function catchWeather() {
     });
 }
 
-function catchNowDay(t) {
+function catchNowDay() {
   let now = new Date();
   // 同步修改日期
   nowDDay.innerText = now
@@ -130,9 +130,8 @@ function catchNowDay(t) {
       return x;
     })
     .join("-");
-  nowDDay.innerText = t.toJSON().slice(0, 10);
   // 修改出勤查詢按鈕的日期
-  nowCalender.innerText = t.getDate();
+  nowCalender.innerText = now.getDate();
   // 星期幾
   let transWeek = [
     "（日）",
@@ -143,9 +142,8 @@ function catchNowDay(t) {
     "（五）",
     "（六）",
   ];
-  nowWeek.innerText = transWeek[t.getDay()];
+  nowWeek.innerText = transWeek[now.getDay()];
 }
-
 window.setInterval(clock, 1000);
 function clock() {
   let hh = new Date().getHours();
