@@ -1,0 +1,711 @@
+* {
+  margin: 0;
+  padding: 0;
+  /* transition: 0.4s; */
+  font-family: "Noto Sans TC", sans-serif;
+}
+body{
+  overflow: hidden;
+}
+/* 顏色設定 */
+:root {
+  --check-color: black;
+  --iSpan-blue: #1e3c84;
+  --iSpan-lightblue: #e2e9fa;
+  --class-first: #0b5d83;
+  --class-second: #dd5560;
+  --class-third: #5aaa95;
+  --class-fourth: #ffa347;
+  --class-first-border: #08415c;
+  --class-second-border: #cc2936;
+  --class-third-border: #458775;
+  --class-fourth-border: #ff8811;
+}
+
+/* 自訂CSS */
+
+/* LOGO */
+.logo {
+  position: absolute;
+  top: 50px;
+  left: 50px;
+  width: 200px;
+  overflow: hidden;
+}
+
+.logo img {
+  width: 100%;
+  object-fit: contain;
+}
+
+/* 上橫幅 */
+header,
+.vertical {
+  display: none;
+  overflow: hidden;
+}
+
+/* 主要區塊 */
+main {
+  min-height: 85vh;
+  background-color: var(--iSpan-lightblue);
+}
+
+/* 下橫幅(其他資訊) */
+footer {
+  background-color: var(--iSpan-blue);
+}
+
+/* 水平視窗(橫螢幕) */
+/* 主要文字 */
+.horizontal > h2 {
+  width: 100%;
+  text-align: center;
+  color: white;
+  font-size: 100px;
+  padding: 0 150px;
+  box-sizing: border-box;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-shadow: 0px 0px 15px black;
+}
+
+/* 出勤查詢、條碼報到 */
+.attendance {
+  width: 100px;
+  height: 100px;
+  position: fixed;
+  left: 3vw;
+  bottom: 22vh;
+  cursor: pointer;
+}
+
+.btnBox {
+  width: 100%;
+  height: 100%;
+  background-image: url(../icons/check.svg);
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+.calenderTextBox::before {
+  content: "";
+  background-color: black;
+  width: 60px;
+  height: 14px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 3px 3px 0 0;
+}
+
+.calenderTextBox {
+  width: 60px;
+  height: 50px;
+  background-color: #e8e8e8;
+  border-radius: 3px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 1px 1px 10px gray;
+  color: red;
+  padding: 9px 0 5px;
+}
+
+.calenderTextBox p {
+  font-size: 40px;
+  text-align: center;
+  line-height: 60px;
+  font-weight: bold;
+}
+
+.attendance h3,
+.checkIn h3 {
+  text-align: center;
+  color: var(--check-color);
+  margin-top: 8px;
+}
+
+.checkIn {
+  display: none;
+}
+
+/* 地區、天氣、日期顯示 */
+.info {
+  font-size: 26px;
+  height: 15vh;
+  width: 100%;
+  position: relative;
+  justify-content: center;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.info div {
+  margin: 0 50px;
+  color: white;
+}
+
+.weatherBox,
+.temperatureBox {
+  display: flex;
+  align-items: center;
+}
+
+.weatherBox span,
+.temperatureBox span {
+  margin-left: 5px;
+}
+
+.weatherBox img,
+.temperatureBox img {
+  margin-right: 5px;
+}
+
+#containerRow1,
+#containerRow2,
+#containerRow3 {
+  width: 100%;
+  overflow: hidden;
+}
+
+@keyframes slideBox2 {
+  0% {
+    transform: translateX(0);
+  }
+  49% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(-100vw);
+  }
+  99% {
+    transform: translateX(-100vw);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+@keyframes slideBox3 {
+  0% {
+    transform: translateX(0);
+  }
+  32% {
+    transform: translateX(0);
+  }
+  33% {
+    transform: translateX(-100vw);
+  }
+  66% {
+    transform: translateX(-100vw);
+  }
+  67% {
+    transform: translateX(-200vw);
+  }
+  99% {
+    transform: translateX(-200vw);
+  }
+}
+@keyframes slideBox4 {
+  0% {
+    transform: translateX(0);
+  }
+  24% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-100vw);
+  }
+  49% {
+    transform: translateX(-100vw);
+  }
+  50% {
+    transform: translateX(-200vw);
+  }
+  74% {
+    transform: translateX(-200vw);
+  }
+  75% {
+    transform: translateX(-300vw);
+  }
+  99% {
+    transform: translateX(-300vw);
+  }
+}
+
+/* 出勤查詢按鈕 */
+.modalContainer {
+  width: 100vw;
+  height: 100vh;
+  background-color: rgb(128, 128, 128, 0.5);
+  /* 隱藏!!! */
+  display: none;
+  z-index: 9999;
+  position: fixed;
+  top: 0;
+}
+.modalBox {
+  width: 70%;
+  height: 600px;
+  background-color: white;
+  border: 5px solid black;
+  border-radius: 10px;
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 20;
+}
+#studentInfo {
+  width: 85%;
+  margin: auto;
+  font-size: 24px;
+  padding: 20px 0;
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+}
+
+#studentInfo.hidden {
+  visibility: hidden;
+}
+#studentCheckInInfo {
+  width: 85%;
+  margin: auto;
+  padding: 20px 0;
+  position: relative;
+}
+#studentCheckInSid {
+  font-size: 40px;
+  line-height: 1em;
+}
+#studentCheckInName {
+  font-size: 100px;
+  color: var(--class-fourth-border);
+}
+#courseCheckInName {
+  margin-right: 50px;
+}
+#checkInCurrentTime {
+  font-size: 24px;
+}
+.studentCheckInClassBox {
+  display: flex;
+  font-size: 45px;
+  flex-wrap: wrap;
+  margin: 15px 0;
+  color: var(--iSpan-blue);
+}
+/* 到這 2023/05/10 Eddie */
+#attendanceFailed {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  color: red;
+  visibility: hidden;
+}
+#attendanceFailed.show {
+  visibility: visible;
+}
+
+#attendanceContainer.show,
+#checkInContainer.show {
+  display: block;
+}
+
+.closeModalBox {
+  text-align: right;
+}
+.closeModalBox > img {
+  background-color: #ff8811;
+  margin: 5px;
+  cursor: pointer;
+}
+
+#attendanceTable {
+  width: 85%;
+  margin: auto;
+  border-collapse: collapse;
+}
+th,
+td {
+  border: 1px solid black;
+}
+#attendanceTable thead th {
+  font-size: 20px;
+  width: 12%;
+  padding: 8px;
+  background-color: gray;
+  color: white;
+  letter-spacing: 2px;
+  font-weight: 500;
+}
+#attendanceTable tbody th {
+  font-size: 20px;
+  background-color: gray;
+  color: white;
+  letter-spacing: 2px;
+  font-weight: 500;
+}
+#attendanceTable tbody td {
+  height: 80px;
+  vertical-align: middle;
+  text-align: center;
+}
+#attendancePrevBtn,
+#attendanceNextBtn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  cursor: pointer;
+}
+#attendancePrevBtn {
+  left: -100px;
+}
+#attendanceNextBtn {
+  right: -100px;
+}
+.attendanceBtnBorder {
+  border-radius: 5px;
+  border: 3px solid black;
+}
+
+.countDownText {
+  font-size: 20px;
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+}
+#checkInResponse {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 70px;
+  font-weight: bold;
+  white-space: nowrap;
+}
+#checkInResponse.success {
+  color: green;
+}
+#checkInResponse.failed {
+  color: red;
+}
+/* 直式螢幕 */
+@media screen and (orientation: portrait) {
+  /* 上橫幅 */
+  header {
+    display: block;
+    /* height: 150px; */
+    padding: 5% 10%;
+    background-color: var(--iSpan-blue);
+  }
+  /* 主要區域 */
+  main {
+    min-height: calc(100vh - 376px);
+    background-color: var(--iSpan-lightblue);
+  }
+  /* 下橫幅 */
+  footer {
+    background-color: var(--iSpan-blue);
+    position: relative;
+  }
+
+  /* Logo */
+  .logoOrigin {
+    display: none;
+  }
+
+  .logoWhite {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  /* 橫式標題 */
+  .horizontal > h2 {
+    display: none;
+  }
+  /* 出勤查詢、條碼報到按鈕 */
+  .btnGroup {
+    display: flex;
+    position: absolute;
+    top: -180px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .checkIn {
+    width: 100px;
+    height: 100px;
+    cursor: pointer;
+    display: block;
+  }
+
+  .attendance {
+    position: static;
+    margin-right: 75px;
+  }
+
+  .checkIn img {
+    width: 70px;
+    height: 70px;
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  /* 天氣、日期、地點資訊 */
+  .info {
+    height: auto;
+    width: 80%;
+    padding: 20px 0;
+  }
+
+  .info div {
+    padding: 20px 0;
+  }
+  /* 直式內容 */
+  .vertical {
+    display: block;
+  }
+  /* 直式標題 */
+  .vertical h2 {
+    text-align: center;
+    font-size: 50px;
+    letter-spacing: 5px;
+    padding: 25px;
+    margin-top: 50px;
+  }
+  /* 課程盒子 */
+  #classContainer {
+    display: flex;
+  }
+  /* 單一課程卡片 */
+  .classBox {
+    display: flex;
+    width: 95%;
+    margin: 30px auto;
+    color: white;
+  }
+  .classroom {
+    width: 22%;
+    padding: 10px;
+    clip-path: polygon(10% 0%, 0% 100%, 90% 100%, 100% 0%);
+    background-color: var(--class-first-border);
+  }
+
+  .roomId {
+    font-size: 80px;
+    background-color: var(--class-first);
+    text-align: center;
+    clip-path: polygon(10% 0%, 3% 100%, 93% 100%, 100% 0%);
+  }
+  .classroom div:last-child {
+    text-align: right;
+    padding: 5px 30px;
+    font-size: 30px;
+  }
+
+  .classInfo {
+    width: 73%;
+    padding: 10px;
+    background-color: var(--class-first);
+    clip-path: polygon(3.5% 0%, 0% 100%, 96% 100%, 100% 0%);
+    position: relative;
+  }
+
+  .classroomColor1 {
+    background-color: var(--class-second-border);
+  }
+  .classroomColor2 {
+    background-color: var(--class-third-border);
+  }
+  .classroomColor3 {
+    background-color: var(--class-fourth-border);
+  }
+
+  .classroomColor1 .roomId,
+  .classInfoColor1 {
+    background-color: var(--class-second);
+  }
+  .classroomColor2 .roomId,
+  .classInfoColor2 {
+    background-color: var(--class-third);
+  }
+  .classroomColor3 .roomId,
+  .classInfoColor3 {
+    background-color: var(--class-fourth);
+  }
+  .className {
+    font-size: 36px;
+    white-space: nowrap;
+    position: relative;
+    border-bottom: 2px solid white;
+    padding: 30px;
+    box-sizing: border-box;
+    width: 100%;
+    text-align: center;
+  }
+  .classTime {
+    white-space: nowrap;
+    font-size: 26px;
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+  }
+  .classTime > :first-child {
+    padding-right: 50px;
+  }
+  #studentInfo,
+  #studentCheckInInfo {
+    flex-direction: column;
+  }
+  /* .attendanceBox{
+    height: 800px;
+  } */
+}
+
+@media screen and (max-width: 1440px) {
+  .horizontal > h2 {
+    font-size: 80px;
+    white-space: nowrap;
+  }
+  .info {
+    width: 70%;
+  }
+}
+
+@media screen and (max-width: 1139px) {
+  .vertical {
+    padding-bottom: 200px;
+  }
+  .horizontal > h2 {
+    font-size: 60px;
+  }
+  .info {
+    width: 80%;
+    font-size: 20px;
+  }
+}
+@media screen and (orientation: portrait) and (max-width: 996px) {
+  .roomId {
+    font-size: 50px;
+    clip-path: polygon(10% 0%, 3.5% 100%, 93.5% 100%, 100% 0%);
+  }
+
+  .className {
+    padding: 0 10px 20px;
+    font-size: 30px;
+  }
+  .classInfo {
+    padding: 20px;
+    flex-grow: 1;
+    clip-path: polygon(2% 0%, 0% 100%, 98% 100%, 100% 0%);
+  }
+  .classroom {
+    width: 120px;
+  }
+  .classTime {
+    font-size: 20px;
+  }
+  .info {
+    width: 90%;
+  }
+  #checkInBox {
+    width: 80%;
+  }
+}
+@media screen and (orientation: portrait) and (max-width: 768px) {
+  .classroom {
+    width: 15%;
+  }
+  .classroom div:last-child {
+    padding: 5px;
+    white-space: nowrap;
+  }
+  .roomId {
+    font-size: 30px;
+  }
+  .classInfo {
+    padding: 10px;
+    width: 80%;
+    clip-path: polygon(2% 0%, 0% 100%, 98% 100%, 100% 0%);
+  }
+  .className {
+    padding: 10px;
+    font-size: 30px;
+  }
+  .classTime {
+    bottom: 15px;
+  }
+}
+@media screen and (max-width: 414px) {
+  .horizontal > h2 {
+    font-size: 60px;
+  }
+  .vertical h2 {
+    margin-top: 0;
+    padding: 25px 25px 0;
+    font-size: 30px;
+  }
+  .info {
+    font-size: 14px;
+    width: 100%;
+  }
+  .classroom .roomId {
+    font-size: 18px;
+    clip-path: none;
+    background-color: transparent;
+  }
+  .classroom {
+    clip-path: none;
+    width: 60px;
+    padding: 10px 0;
+  }
+  .classroom div:last-child {
+    font-size: 14px;
+    padding: 5px 10px;
+    white-space: nowrap;
+  }
+  .className {
+    padding: 0 10px 5px;
+    font-size: 16px;
+  }
+  .classTime {
+    font-size: 14px;
+    bottom: 10px;
+  }
+  .classTime > :first-child {
+    padding-right: 20px;
+  }
+
+  .classInfo {
+    clip-path: none;
+    width: calc(95% - 60px);
+  }
+  .info div {
+    padding: 10px;
+    margin: 0;
+  }
+}
+@media screen and (max-width: 370px) {
+  .classroom {
+    padding: 10px 0;
+  }
+  .classroom div:last-child {
+    text-align: center;
+  }
+}

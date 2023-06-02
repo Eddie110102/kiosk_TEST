@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>簽到打卡系統</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100;300;400;500;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <!-- 自訂CSS -->
+    <link rel="stylesheet" href="index.css" />
+  </head>
+  <body>
+    <h1 class="logo">
+      <img src="./icons/Logo.svg" alt="" class="logoOrigin" />
+    </h1>
+    <header>
+      <img src="./icons/Logo_full.svg#23" alt="" class="logoWhite" />
+    </header>
+    <main>
+      <div class="horizontal">
+        <h2>請刷 QR Code 簽到/簽退</h2>
+      </div>
+      <!-- 顯示課程 -->
+      <div class="vertical">
+        <h2>今日課程</h2>
+        <div id="classContainer">123243434</div>
+      </div>
+      <!-- 出勤查詢 -->
+      <section id="attendanceContainer" class="modalContainer">
+        <div class="modalBox" id="attendanceBox">
+          <div id="attendancePrevBtn" class="attendanceBtnBorder">
+            <img src="./icons/arrow_Prev.svg" alt="上一週" />
+          </div>
+          <div id="attendanceNextBtn" class="attendanceBtnBorder">
+            <img src="./icons/arrow_Next.svg" alt="下一週" />
+          </div>
+          <div class="closeModalBox">
+            <img
+              src="./icons/close.svg"
+              alt=""
+              id="closeAttendance"
+              class="attendanceBtnBorder"
+            />
+          </div>
+          <div id="studentInfo">
+            <h3>姓名：<span id="studentName">王緯宸</span></h3>
+            <h3>班級：<span id="courseName">前端工程師就業養成班</span></h3>
+            <h3 id="attendanceFailed">請重新掃描QR Code！</h3>
+          </div>
+          <table id="attendanceTable">
+            <thead>
+              <tr id="attendanceDate">
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+              </tr>
+              <tr id="attendanceWeek">
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr id="block1">
+                <th>上午</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr id="block2">
+                <th>下午</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr id="block3">
+                <th>夜間</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+          <div id="attendanceCountDownText" class="countDownText">10</div>
+        </div>
+      </section>
+      <!-- 條碼報到 -->
+      <section id="checkInContainer" class="modalContainer">
+        <div class="modalBox" id="checkInBox">
+          <div class="closeModalBox">
+            <img
+              src="./icons/close.svg"
+              alt=""
+              id="closeCheckIn"
+              class="attendanceBtnBorder"
+            />
+          </div>
+          <!-- 2023/05/10 Eddie -->
+          <div id="studentCheckInInfo">
+            <h3 id="studentCheckInSid">25</h3>
+            <h3 id="studentCheckInName">王緯宸</h3>
+            <div class="studentCheckInClassBox">
+              <h3 id="courseCheckInName">前端工程師就業養成班</h3>
+              <h3 id="studentCheckInClassRoom">大安大樓 2F-206 教室</h3>
+            </div>
+            <h3 id="checkInCurrentTime">2023/05/10 11:33:10</h3>
+          </div>
+          <div id="checkInResponse">打卡失敗</div>
+          <div id="checkInCountDownText" class="countDownText">10</div>
+        </div>
+      </section>
+    </main>
+    <footer>
+      <div class="btnGroup">
+        <!-- 出勤查詢按鈕 -->
+        <div class="attendance" id="attendanceBtn">
+          <div class="btnBox">
+            <div class="calenderTextBox">
+              <p id="todayCalender">20</p>
+            </div>
+          </div>
+          <h3>出勤查詢</h3>
+        </div>
+        <!-- 條碼報到按鈕 -->
+        <div class="checkIn" id="checkInBtn">
+          <div class="btnBox">
+            <img src="./icons/qrcode.svg" alt="" />
+          </div>
+          <h3>條碼報到</h3>
+        </div>
+      </div>
+      <!-- 地區、天氣、日期顯示 -->
+      <div class="info">
+        <div id="location">地區</div>
+        <div><span id="dDay">幾月幾日</span><span id="week">星期幾</span></div>
+        <div id="time">00:00:00</div>
+        <div class="temperatureBox">
+          <img src="./icons/temperature.svg" alt="" />最高溫度
+          <span id="temperature">00</span>
+        </div>
+        <div class="weatherBox">
+          <img src="" alt="天氣圖示" id="weatherIcon"  />降雨機率<span id="PoP"
+            >00%</span
+          >
+        </div>
+      </div>
+    </footer>
+    <script src="index.js"></script>
+    <script src="catchClass.js"></script>
+    <!-- <script src="attendance.js"></script> -->
+    <script src="btns.js"></script>
+  </body>
+</html>
