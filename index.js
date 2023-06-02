@@ -165,7 +165,7 @@ function clock() {
 
   // 抓取天氣12小時的預測，如果現在時間超過，就重新抓天氣
   let endTime = localStorage.getItem("weatherEndTime");
-  if (new Date() >= new Date(endTime)) {
+  if (new Date() >= new Date(endTime)&& endTime != null) {
     console.log("現在時間大於天氣的結束時間");
     catchWeather();
   }
