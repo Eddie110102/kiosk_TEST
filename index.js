@@ -28,7 +28,14 @@ let locationAPIUTF8 = "";
 
 // 抓取經緯度並轉換成UTF-8地址
 function catchLocation() {
-  if (!localStorage.getItem("theCityName")) {
+  console.log('檢查是否有theCityName',localStorage.getItem("theCityName"));
+  if (localStorage.getItem("theCityName") !== null) {
+    console.log("已經有了不用再用GOOGLE API");
+    locationResult = localStorage.getItem("theCityName");
+    locationAPIUTF8 = localStorage.getItem("theCityNameUTF8");
+    catchWeather();
+  } else {
+    console.log('localStorage沒有theCityName');
     let lang = "";
     if ("geolocation" in navigator) {
       // geolocation is available
@@ -42,7 +49,7 @@ function catchLocation() {
             return res.json();
           })
           .then((myJson) => {
-            // console.log("myJson", myJson);
+            console.log("myJson", myJson);
             // 2GMV+C74 台灣台北市大安區 保留「 縣市+區域 」
             locationResult = myJson.plus_code.compound_code.split("灣")[1];
             // 如果有「台」就轉換成「台」 => 讓opendata API可以正常執行
@@ -75,11 +82,6 @@ function catchLocation() {
       locationAPIUTF8 = "%E8%87%BA%E5%8C%97%E5%B8%82";
       catchWeather();
     }
-  } else {
-    console.log("已經有了不用再用GOOGLE API");
-    locationResult = localStorage.getItem("theCityName");
-    locationAPIUTF8 = localStorage.getItem("theCityNameUTF8");
-    catchWeather();
   }
 }
 
@@ -118,6 +120,7 @@ function catchWeather() {
 }
 
 function catchNowDay(t) {
+  let now = new Date();
   // 同步修改日期
   nowDDay.innerText = now
     .toLocaleDateString()
