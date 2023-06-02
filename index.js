@@ -33,6 +33,7 @@ function catchLocation() {
     // geolocation is available
     const successCallBack = async (position) => {
       lang = `${position.coords.latitude},${position.coords.longitude}`;
+      // console.log('lang',lang);
       await fetch(
         `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lang}&key=${GOOGLE_API_KEY}`
       )
@@ -40,14 +41,20 @@ function catchLocation() {
           return res.json();
         })
         .then((myJson) => {
-          // console.log('myJson',myJson);
+          // console.log("myJson", myJson);
           // 2GMV+C74 台灣台北市大安區 保留「 縣市+區域 」
           locationResult = myJson.plus_code.compound_code.split("灣")[1];
+          // 如果有「台」就轉換成「台」 => 讓opendata API可以正常執行
+          locationResult.includes("台")
+            ? locationResult = locationResult.replace("台", "臺")
+            : locationResult;
           // 「台灣台北市」=> 「臺北市」轉譯成 %E8%87%BA%E5%8C%97%E5%B8%82
-          locationAPIUTF8 = encodeURIComponent(
-            myJson.results[myJson.results.length - 3].formatted_address
-              .split("灣")[1]
-              .replace("台", "臺")
+          locationAPIUTF8 = encodeURIComponent(locationResult.slice(0, 3));
+          console.log(
+            "locationResult",
+            locationResult,
+            "locationAPIUTF8",
+            locationAPIUTF8,'locationResult.slice(0, 3)',locationResult.slice(0, 3)
           );
           catchWeather();
         });
